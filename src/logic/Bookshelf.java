@@ -38,4 +38,12 @@ public class Bookshelf {
         }
         return list;
     }
+
+    public int[] listId() {
+        int[] list = new int[this.books.size()];
+        for (int i = 0; i < list.length; i++) {
+            list[i] = this.books.get(i).getId();
+        }
+        return list;
+    }
 }
