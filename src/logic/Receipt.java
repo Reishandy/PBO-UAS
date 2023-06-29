@@ -2,12 +2,12 @@
 package logic;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class Receipt {
+    private boolean returned;
     private Person borrower;
     private ArrayList<Book> books;
     protected LocalDate borrowDate, returnDate;
@@ -41,11 +41,27 @@ public class Receipt {
         } else return false;
     }
 
+    public boolean isReturned() {
+        return returned;
+    }
+
+    public String returnBook(boolean returned, String date) {
+        LocalDate dateReturn = LocalDate.parse(date);
+        if (!Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) {
+            return "Date format not compatible, use '2000-12-31'";
+        } else if (dateReturn.isBefore(returnDate) || dateReturn.isEqual(returnDate)) {
+            this.returned = returned;
+            return "Successfully returned";
+        }
+        this.returned = false;
+        int late = (int) returnDate.until(dateReturn, ChronoUnit.DAYS);
+        return "Returned but wwith a penalty of %d days (denda masih belum dihitung)".formatted(late);
+    }
+
     public String listBook() {
         StringBuilder books = new StringBuilder();
-        for (Book book : this.books) {
+        for (Book book : this.books)
             books.append(book.getTitle()).append("(%d), ".formatted(book.getId()));
-        }
         return books.toString();
     }
 
@@ -78,6 +94,9 @@ public class Receipt {
                 Book/s      : %s
                 Date borrow : %s
                 Date return : %s
-                """.formatted(borrower.getName(), borrower.getId(), listBook(), borrowDate, returnDate);
+                Returned    : %s
+                """.formatted(
+                borrower.getName(), borrower.getId(), listBook(),
+                borrowDate, returnDate, returned? "Yes" : "No");
     }
 }
