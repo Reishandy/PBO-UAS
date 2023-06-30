@@ -1,11 +1,10 @@
-// Author: Muhammad Akbar Reishandy
 package logic.books;
 
 import logic.Book;
 
-public class TextBook extends Book implements IType {
-    // TODO: tambahkan matapelajaran
-    public TextBook(int id, String title, String author, String publisher, int year, int pages) {
+public class Dictionary extends Book implements IType {
+    // TODO: tambahkan kamus bahasa apa dan juga di tostring
+    public Dictionary(int id, String title, String author, String publisher, int year, int pages) {
         super(id, title, author, publisher, year, pages);
     }
 
@@ -51,11 +50,11 @@ public class TextBook extends Book implements IType {
 
     @Override
     public String toString() {
-        return super.toString() + "type     : TextBook\ncategory : Non-Fiction";
+        return super.toString()  + "type     : Dictionary\ncategory : Non-Fiction";
     }
 
     @Override
     public String getType() {
-        return "TextBook";
+        return "Dictionary";
     }
 }

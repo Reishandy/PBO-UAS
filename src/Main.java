@@ -10,6 +10,9 @@ public class Main {
     private static final Bookshelf shelf = new Bookshelf();
     private static final ArrayList<Receipt> receipts = new ArrayList<>();
     public static void main(String[] args) {
+        // TODO: rewrite the entire code with more modular method
+        // TODO: Sorry for the mess, this is just the prototype after all, need refactoring
+
         // Init default book
         TextBook textBook = new TextBook(122, "Matematika dasar", "Ayam", "Kuxinf.inc", 2001, 190);
         shelf.addBook(textBook);
@@ -70,7 +73,7 @@ public class Main {
                             break;
                         }
                         else if (resultReturn >= 1) {
-                            System.out.printf("Returned but wwith a penalty of %d days (denda masih belum dihitung)%n", resultReturn);
+                            System.out.printf("Returned but with a penalty of %d days (denda masih belum dihitung)%n", resultReturn);
                             break;
                         }
                     }
@@ -141,6 +144,8 @@ public class Main {
         receipt.addBook(borrowBook);
 
         // input return date
+        // TODO: set a limit on how long to return it
+        // TODO: add description on what's wrong with input
         System.out.println("-----------------");
         System.out.printf("Borrowing date: %s\n", receipt.getBorrowDate());
         do {
@@ -185,21 +190,24 @@ public class Main {
         }
 
         // Need to check what types of book is available on hardcoded
-        System.out.print("Type of book: \n1. TextBook\n2. masih ada satu tipe saja\n> ");
+        System.out.print("Type of book: \n1. TextBook\n2. Novel\n3. Dictionary");
         int input = 0;
-        // change to while loop after adding another types
         do {
+            System.out.print("\n> ");
             try {
                 input = Integer.parseInt(sc.nextLine());
             } catch (Exception ignored) {
             }
-        } while (input != 1);
+        } while (input != 1 && input != 2 && input != 3);
 
-        // Add book
-        // change to switch case when have more than one types
-        TextBook book = new TextBook(id, title, author, publisher, year, pages);
+        // Add book based on type
+        Book book = null;
+        switch (input) {
+            case 1 -> book = new TextBook(id, title, author, publisher, year, pages);
+            case 2 -> book = new Novel(id, title, author, publisher, year, pages);
+            case 3 -> book = new Dictionary(id, title, author, publisher, year, pages);
+        }
         shelf.addBook(book);
-
     }
 
     private static int printMenu() {
