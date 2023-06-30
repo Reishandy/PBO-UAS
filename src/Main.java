@@ -44,7 +44,8 @@ public class Main {
 
                     int input = -2;
                     while (true) {
-                        System.out.print("-1 to exit: ");
+                        System.out.print("\n(input number eg. 1)");
+                        System.out.print("\n-1 to exit > ");
                         try {
                             input = Integer.parseInt(sc.nextLine());
                         } catch (Exception ignored) {}
@@ -213,8 +214,9 @@ public class Main {
     private static int printMenu() {
         int input = 0;
         System.out.println("--- Borrowing book ---");
-        System.out.print("0. Exit\n1. Start\n2. Return book\n> ");
+        System.out.print("0. Exit\n1. Start\n2. Return book");
         while (true) {
+            System.out.print("\n(input number eg. 1) > ");
             try {
                 input = Integer.parseInt(sc.nextLine());
             } catch (Exception ignored) {}
