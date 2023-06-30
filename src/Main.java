@@ -2,19 +2,20 @@
 import logic.*;
 import logic.books.*;
 
-import java.net.CacheResponse;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     private static final Scanner sc = new Scanner(System.in);
     private static final Bookshelf shelf = new Bookshelf();
+    private static final ArrayList<Receipt> receipts = new ArrayList<>();
     public static void main(String[] args) {
         // Init default book
         TextBook textBook = new TextBook(122, "Matematika dasar", "Ayam", "Kuxinf.inc", 2001, 190);
         shelf.addBook(textBook);
 
         // init receipt
-        Receipt receipt = null;
+        Receipt receipt;
 
         // Call menu
         while (true) {
@@ -24,17 +25,65 @@ public class Main {
                     receipt = borrow();
                     System.out.println("-----------------");
                     System.out.println(receipt);
+                    receipts.add(receipt);
                 }
-                case 2 -> System.out.println("TODO");
+                case 2 -> {
+                    System.out.println("--- Select Receipt ---");
+                    // Display all receipt
+                    for (int i = 0; i < receipts.size(); i ++) {
+                        System.out.printf("%d. %s", (i + 1), receipts.get(i));
+                    }
+
+                    if (receipts.size() == 0) {
+                        System.out.println("There is no recorded borrowing yet...");
+                        break;
+                    }
+
+                    int input = -2;
+                    while (true) {
+                        System.out.print("-1 to exit: ");
+                        try {
+                            input = Integer.parseInt(sc.nextLine());
+                        } catch (Exception ignored) {}
+                        if (input == -1) break;
+                        if (input > 0 && input <= receipts.size()) break;
+                    }
+                    if (input == -1) break;
+
+                    // check if already returned
+                    Receipt currentReceipt = receipts.get(input - 1);
+                    if (currentReceipt.isReturned()) {
+                        System.out.println("Already returned...");
+                        break;
+                    }
+
+                    System.out.println("-----------------");
+                    System.out.println("Selected receipt: ");
+                    System.out.println(currentReceipt);
+                    System.out.println("-----------------");
+                    while (true) {
+                        System.out.print("Insert current date ('yyyy-MM-dd'): ");
+                        int resultReturn = currentReceipt.returnBook(sc.nextLine());
+                        if (resultReturn == -1) continue;
+                        if (resultReturn == 0) {
+                            System.out.println("Successfully returned");
+                            break;
+                        }
+                        else if (resultReturn >= 1) {
+                            System.out.printf("Returned but wwith a penalty of %d days (denda masih belum dihitung)%n", resultReturn);
+                            break;
+                        }
+                    }
+                }
             }
-            if (op == 0) break;
+
+            if (op == 0) System.exit(1);
         }
-        // print receipt and save?
     }
 
     private static Receipt borrow() {
         // init variable
-        String name, email, returnDate;
+        String name, email;
         int id;
         Book borrowBook = null;
 
@@ -138,22 +187,18 @@ public class Main {
         // Need to check what types of book is available on hardcoded
         System.out.print("Type of book: \n1. TextBook\n2. masih ada satu tipe saja\n> ");
         int input = 0;
-        while (true) {
+        // change to while loop after adding another types
+        do {
             try {
                 input = Integer.parseInt(sc.nextLine());
-            } catch (Exception ignored) {}
-            if (input == 1) break;
-        }
-
-        //Add book
-        // warning because ther is only one types of book rn
-        switch (input) {
-            case 1 -> {
-                TextBook book = new TextBook(id, title, author, publisher, year, pages);
-                shelf.addBook(book);
+            } catch (Exception ignored) {
             }
-            default -> throw new RuntimeException();
-        }
+        } while (input != 1);
+
+        // Add book
+        // change to switch case when have more than one types
+        TextBook book = new TextBook(id, title, author, publisher, year, pages);
+        shelf.addBook(book);
 
     }
 

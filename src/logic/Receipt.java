@@ -10,16 +10,12 @@ import java.util.regex.Pattern;
 public class Receipt {
     private boolean returned;
     private Person borrower;
-    private ArrayList<Book> books;
+    private final ArrayList<Book> books;
     protected LocalDate borrowDate, returnDate;
 
     public Receipt() {
         books = new ArrayList<>();
         borrowDate = LocalDate.now();
-    }
-
-    public Person getBorrower() {
-        return borrower;
     }
 
     public void setBorrower(Person borrower) {
@@ -28,10 +24,6 @@ public class Receipt {
 
     public void addBook(Book book) {
         books.add(book);
-    }
-
-    public void addBook(ArrayList<Book> books) {
-        this.books = books;
     }
 
     public boolean setReturnDate(String date) {
@@ -51,17 +43,29 @@ public class Receipt {
         return returned;
     }
 
-    public String returnBook(boolean returned, String date) {
-        LocalDate dateReturn = LocalDate.parse(date);
+    public int returnBook(String date) {
+        // Return -1 if there is something wrong
+        // Return 0 if good
+        // Return positive integer if there is penalty
+
+        LocalDate dateReturn;
         if (!Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) {
-            return "Date format not compatible, use '2000-12-31'";
-        } else if (dateReturn.isBefore(returnDate) || dateReturn.isEqual(returnDate)) {
-            this.returned = returned;
-            return "Successfully returned";
+            return -1;
         }
+
+        try {
+            dateReturn = LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
+            return -1;
+        }
+
+        if (dateReturn.isBefore(returnDate) || dateReturn.isEqual(returnDate)) {
+            this.returned = true;
+            return 0;
+        }
+
         this.returned = false;
-        int late = (int) returnDate.until(dateReturn, ChronoUnit.DAYS);
-        return "Returned but wwith a penalty of %d days (denda masih belum dihitung)".formatted(late);
+        return (int) returnDate.until(dateReturn, ChronoUnit.DAYS);
     }
 
     public LocalDate getBorrowDate() {
