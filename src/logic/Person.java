@@ -15,12 +15,12 @@ public class Person {
         return name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override

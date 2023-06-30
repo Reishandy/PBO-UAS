@@ -104,13 +104,13 @@ public class Receipt {
         if (returnDate == null) return null;
         return """
                 --Borrowing receipt--
-                Borrower    : %s (%d)
+                Borrower    : %s (%d) at %s
                 Book/s      : %s
                 Date borrow : %s
                 Date return : %s
                 Returned    : %s
                 """.formatted(
-                borrower.getName(), borrower.getId(), listBook(),
+                borrower.getName(), borrower.getId(), borrower.getEmail(), listBook(),
                 borrowDate, returnDate, returned? "Yes" : "No");
     }
 }
