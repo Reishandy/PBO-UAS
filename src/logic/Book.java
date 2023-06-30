@@ -63,7 +63,7 @@ public abstract class Book {
     @Override
     public String toString() {
         return """
-               Book
+               Book data
                title    : %s
                id       : %d
                author   : %s

@@ -2,6 +2,7 @@
 package logic;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -34,11 +35,16 @@ public class Receipt {
     }
 
     public boolean setReturnDate(String date) {
-        // Check regex for inputted date, then convert that to LocalDate
-        if (Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) {
+        // Check regex for inputted date
+        if (!Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) return false;
+        // check if legit date
+        try {
             returnDate = LocalDate.parse(date);
-            return true;
-        } else return false;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        // Check if valid date, if valid return true
+        return !returnDate.isBefore(borrowDate) && !returnDate.isEqual(borrowDate);
     }
 
     public boolean isReturned() {
@@ -56,6 +62,10 @@ public class Receipt {
         this.returned = false;
         int late = (int) returnDate.until(dateReturn, ChronoUnit.DAYS);
         return "Returned but wwith a penalty of %d days (denda masih belum dihitung)".formatted(late);
+    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
     }
 
     public String listBook() {
