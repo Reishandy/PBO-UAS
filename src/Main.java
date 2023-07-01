@@ -142,8 +142,6 @@ public class Main {
         receipt.addBook(borrowBook);
 
         // input return date
-        // TODO: set a limit on how long to return it
-        // TODO: add description on what's wrong with input
         System.out.println("-----------------");
         System.out.printf("Borrowing date: %s%n", receipt.getBorrowDate());
         while (true) {
