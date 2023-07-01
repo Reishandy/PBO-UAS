@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 public class Receipt {
     private boolean returned;
     private Person borrower;
-    private final ArrayList<Book> books;
+    private Book book;
     protected LocalDate borrowDate, returnDate;
 
     public Receipt() {
-        books = new ArrayList<>();
+        book = null;
         borrowDate = LocalDate.now();
         returnDate = LocalDate.now();
     }
@@ -24,7 +24,7 @@ public class Receipt {
     }
 
     public void addBook(Book book) {
-        books.add(book);
+        this.book = book;
     }
 
     public int setReturnDate(String date) {
@@ -40,7 +40,6 @@ public class Receipt {
         } catch (DateTimeParseException e) {
             return 2;
         }
-        System.out.println(inputDate +" "+ returnDate);
 
         // Check if date is more than 4 week, if more return 3
         LocalDate twoWeeksFromNow = LocalDate.now().plusWeeks(4);
@@ -88,11 +87,8 @@ public class Receipt {
         return borrowDate;
     }
 
-    public String listBook() {
-        StringBuilder books = new StringBuilder();
-        for (Book book : this.books)
-            books.append(book.getTitle()).append("(%d), ".formatted(book.getId()));
-        return books.toString();
+    public String getBook() {
+        return "%s (%d)".formatted(book.getTitle(), book.getId());
     }
 
     @Override
@@ -100,16 +96,18 @@ public class Receipt {
         if (this == o) return true;
         if (!(o instanceof Receipt receipt)) return false;
 
+        if (returned != receipt.returned) return false;
         if (!borrower.equals(receipt.borrower)) return false;
-        if (!books.equals(receipt.books)) return false;
+        if (!book.equals(receipt.book)) return false;
         if (!borrowDate.equals(receipt.borrowDate)) return false;
         return returnDate.equals(receipt.returnDate);
     }
 
     @Override
     public int hashCode() {
-        int result = borrower.hashCode();
-        result = 31 * result + books.hashCode();
+        int result = (returned ? 1 : 0);
+        result = 31 * result + borrower.hashCode();
+        result = 31 * result + book.hashCode();
         result = 31 * result + borrowDate.hashCode();
         result = 31 * result + returnDate.hashCode();
         return result;
@@ -126,7 +124,7 @@ public class Receipt {
                 Date return : %s
                 Returned    : %s
                 """.formatted(
-                borrower.getName(), borrower.getId(), borrower.getEmail(), listBook(),
+                borrower.getName(), borrower.getId(), borrower.getEmail(), getBook(),
                 borrowDate, returnDate, returned? "Yes" : "No");
     }
 }

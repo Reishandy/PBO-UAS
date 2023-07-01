@@ -154,7 +154,6 @@ public class Main {
                 case 2 -> System.out.println("Not a real date");
                 case 3 -> System.out.println("Maximum return date is 4 weeks");
                 case -1 -> System.out.println("Date must be more than borrow date");
-
             }
         }
 
