@@ -3,10 +3,11 @@ package gui;
 
 import javax.swing.*;
 import gui.borrow.*;
+import gui.returning.ReceiptList;
 
 import java.awt.*;
 
-public class Menu {
+public class Menu extends Component {
     private static JFrame frame;
     private JButton pinjamButton;
     private JButton kembaliButton;
@@ -20,12 +21,16 @@ public class Menu {
     public Menu() {
         // For changing the display (JPanel) to each corresponding gui (borrow or return)
         pinjamButton.addActionListener(e -> {
-            frame.setContentPane(PersonID.getPersonID());
-            frame.repaint();
-            frame.revalidate();
+            change(PersonID.getPersonID());
         });
         kembaliButton.addActionListener(e -> {
-            // TODO
+            // Check if borrowed
+            if (!ReceiptDone.done) {
+                JOptionPane.showMessageDialog(this, "Belum meminjam",
+                        "Error", JOptionPane.WARNING_MESSAGE);
+            } else {
+                change(ReceiptList.getReturnBook());
+            }
         });
     }
 

@@ -4,7 +4,7 @@ package logic;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class Receipt {
@@ -12,11 +12,13 @@ public class Receipt {
     private Person borrower;
     private Book book;
     protected LocalDate borrowDate, returnDate;
+    private final String id;
 
     public Receipt() {
         book = null;
         borrowDate = LocalDate.now();
         returnDate = LocalDate.now();
+        id = UUID.randomUUID().toString().split("-")[0];
     }
 
     public void setBorrower(Person borrower) {
@@ -65,12 +67,14 @@ public class Receipt {
 
         LocalDate dateReturn;
         if (!Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) {
+            this.returned = false;
             return -1;
         }
 
         try {
             dateReturn = LocalDate.parse(date);
         } catch (DateTimeParseException e) {
+            this.returned = false;
             return -1;
         }
 
@@ -79,7 +83,7 @@ public class Receipt {
             return 0;
         }
 
-        this.returned = false;
+        this.returned = true;
         return (int) returnDate.until(dateReturn, ChronoUnit.DAYS);
     }
 
@@ -118,13 +122,18 @@ public class Receipt {
         if (returnDate == null) return null;
         return """
                 --Borrowing receipt--
+                ID          : %s
                 Borrower    : %s (%d) at %s
                 Book/s      : %s
                 Date borrow : %s
                 Date return : %s
                 Returned    : %s
-                """.formatted(
+                """.formatted( getId(),
                 borrower.getName(), borrower.getId(), borrower.getEmail(), getBook(),
                 borrowDate, returnDate, returned? "Yes" : "No");
+    }
+
+    public String getId() {
+        return id;
     }
 }

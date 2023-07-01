@@ -75,7 +75,7 @@ public class SearchBook extends Component {
                 JOptionPane.showMessageDialog(this, "Pilih buku terlebih dahulu",
                         "Error", JOptionPane.WARNING_MESSAGE);
             } else {
-                menu.change(Receipt.getReceipt());
+                menu.change(ReceiptDone.getReceipt());
             }
         });
 

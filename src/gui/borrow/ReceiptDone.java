@@ -2,17 +2,19 @@
 package gui.borrow;
 
 import gui.Menu;
+import logic.Receipt;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 
-public class Receipt extends Component {
-    logic.Receipt receipt = new logic.Receipt();
+public class ReceiptDone extends Component {
+    public static Receipt receipt = new Receipt();
+    public static boolean done;
     private JLabel title;
     private JTextField dateTextField;
     private JButton addButton;
-    private JLabel name;
+    private JLabel backLabel;
     private JPanel dateInputPanel;
     private JPanel receiptPanel;
     private JPanel showReceiptPanel;
@@ -20,7 +22,7 @@ public class Receipt extends Component {
     private JButton doneButton;
 
 
-    public Receipt() {
+    public ReceiptDone() {
         // init form
         Menu menu = new Menu();
 
@@ -55,11 +57,12 @@ public class Receipt extends Component {
         });
 
         doneButton.addActionListener(e -> {
+            done = true;
             menu.change(menu.getMenu());
         });
     }
 
     public static JPanel getReceipt() {
-        return new Receipt().receiptPanel;
+        return new ReceiptDone().receiptPanel;
     }
 }
