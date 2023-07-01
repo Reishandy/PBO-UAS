@@ -13,15 +13,19 @@ public class Menu {
     private JLabel title;
     private JPanel menu;
 
+    public JPanel getMenu() {
+        return menu;
+    }
+
     public Menu() {
         // For changing the display (JPanel) to each corresponding gui (borrow or return)
         pinjamButton.addActionListener(e -> {
-            frame.setContentPane(PersonID.getPanel());
+            frame.setContentPane(PersonID.getPersonID());
             frame.repaint();
             frame.revalidate();
         });
         kembaliButton.addActionListener(e -> {
-            getData("aaaa");
+            // TODO
         });
     }
 
@@ -29,7 +33,7 @@ public class Menu {
         frame = new JFrame("Aplikasi peminjaman buku");
         frame.setContentPane(new Menu().menu);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(460, 400));
+        frame.setPreferredSize(new Dimension(460, 460));
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.pack();
@@ -41,16 +45,8 @@ public class Menu {
                  UnsupportedLookAndFeelException ignored) {}
     }
 
-    // TODO: remove temporary method
-    public void getBack() {
-        frame.setContentPane(menu);
-        frame.repaint();
-        frame.revalidate();
-    }
-
-    public void getData(String data) {
-        frame.setContentPane(menu);
-        title.setText(data);
+    public void change(JPanel panel) {
+        frame.setContentPane(panel);
         frame.repaint();
         frame.revalidate();
     }
