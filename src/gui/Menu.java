@@ -21,7 +21,7 @@ public class Menu {
             frame.revalidate();
         });
         kembaliButton.addActionListener(e -> {
-            title.setText("Peminjaman buku 2");
+            getData("aaaa");
         });
     }
 
@@ -29,7 +29,7 @@ public class Menu {
         frame = new JFrame("Aplikasi peminjaman buku");
         frame.setContentPane(new Menu().menu);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(500, 500));
+        frame.setPreferredSize(new Dimension(460, 400));
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.pack();
@@ -41,9 +41,16 @@ public class Menu {
                  UnsupportedLookAndFeelException ignored) {}
     }
 
-    // TODO: remove temporary getBack
-    public static void getBack() {
-        frame.setContentPane(new Menu().menu);
+    // TODO: remove temporary method
+    public void getBack() {
+        frame.setContentPane(menu);
+        frame.repaint();
+        frame.revalidate();
+    }
+
+    public void getData(String data) {
+        frame.setContentPane(menu);
+        title.setText(data);
         frame.repaint();
         frame.revalidate();
     }
