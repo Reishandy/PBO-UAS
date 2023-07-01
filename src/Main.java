@@ -1,4 +1,5 @@
 // Author: Muhammad Akbar Reishandy
+// Author: Silvi Kusuma Wardhani G.
 import logic.*;
 import logic.books.*;
 
@@ -9,43 +10,40 @@ public class Main {
     private static final Scanner sc = new Scanner(System.in);
     private static final Bookshelf shelf = new Bookshelf();
     private static final ArrayList<Receipt> receipts = new ArrayList<>();
+
     public static void main(String[] args) {
         // TODO: rewrite the entire code with more modular method
-        // TODO: Sorry for the mess, this is just the prototype after all, need refactoring
+        // TODO: Sorry for the mess, this is just the prototype after all, this should be in the GUI
 
         // Init default book
-        TextBook textBook = new TextBook(122, "Matematika dasar", "Ayam", "Kuxinf.inc", 2001, 190);
+        TextBook textBook = new TextBook(122, "Matematika dasar", "Ayam", "Kuxinf.inc", 2001, 190, "Matematika");
         shelf.addBook(textBook);
-
-        // init receipt
-        Receipt receipt;
 
         // Call menu
         while (true) {
             int op = printMenu();
             switch (op) {
                 case 1 -> {
-                    receipt = borrow();
+                    Receipt receipt = borrow();
                     System.out.println("-----------------");
                     System.out.println(receipt);
                     receipts.add(receipt);
                 }
                 case 2 -> {
                     System.out.println("--- Select Receipt ---");
-                    // Display all receipt
-                    for (int i = 0; i < receipts.size(); i ++) {
-                        System.out.printf("%d. %s", (i + 1), receipts.get(i));
-                    }
-
+                    // Check if empty
                     if (receipts.size() == 0) {
                         System.out.println("There is no recorded borrowing yet...");
                         break;
                     }
+                    // Display all receipts
+                    for (int i = 0; i < receipts.size(); i++) {
+                        System.out.printf("%d. %s%n", (i + 1), receipts.get(i));
+                    }
 
                     int input = -2;
                     while (true) {
-                        System.out.print("\n(input number eg. 1)");
-                        System.out.print("\n-1 to exit > ");
+                        System.out.print("(input number eg. 1)%n-1 to exit > ");
                         try {
                             input = Integer.parseInt(sc.nextLine());
                         } catch (Exception ignored) {}
@@ -72,8 +70,7 @@ public class Main {
                         if (resultReturn == 0) {
                             System.out.println("Successfully returned");
                             break;
-                        }
-                        else if (resultReturn >= 1) {
+                        } else if (resultReturn >= 1) {
                             System.out.printf("Returned but with a penalty of %d days (denda masih belum dihitung)%n", resultReturn);
                             break;
                         }
@@ -124,7 +121,7 @@ public class Main {
 
             // if book does not exist add book
             if (borrowBook == null) {
-                System.out.print("Book not found, would you like to add book(Y/n)? ");
+                System.out.print("Book not found, would you like to add book(y/n)? ");
                 if (sc.nextLine().equalsIgnoreCase("y")) addBookToShelf();
                 System.out.println("-----------------");
                 continue;
@@ -134,11 +131,11 @@ public class Main {
             System.out.println("-----------------");
             System.out.println("Is this the book?");
             System.out.println(borrowBook);
-            System.out.print("(y/N) > ");
+            System.out.print("(y/n) > ");
             if (sc.nextLine().equalsIgnoreCase("y")) break;
         }
 
-        // create all necessary element
+        // create all necessary elements
         Person borrower = new Person(name, email, id);
         Receipt receipt = new Receipt();
         receipt.setBorrower(borrower);
@@ -148,10 +145,20 @@ public class Main {
         // TODO: set a limit on how long to return it
         // TODO: add description on what's wrong with input
         System.out.println("-----------------");
-        System.out.printf("Borrowing date: %s\n", receipt.getBorrowDate());
-        do {
+        System.out.printf("Borrowing date: %s%n", receipt.getBorrowDate());
+        while (true) {
             System.out.print("Insert return date ('yyyy-MM-dd'): ");
-        } while (!receipt.setReturnDate(sc.nextLine()));
+            String date = sc.nextLine();
+            int condition = receipt.setReturnDate(date); // Also inserting the date into receipt
+            if (condition == 0) break;
+            switch (condition) {
+                case 1 -> System.out.println("Format 'yyyy-MM-dd' ex. 2020-01-30");
+                case 2 -> System.out.println("Not a real date");
+                case 3 -> System.out.println("Maximum return date is 4 weeks");
+                case -1 -> System.out.println("Date must be more than borrow date");
+
+            }
+        }
 
         return receipt;
     }
@@ -190,11 +197,11 @@ public class Main {
             } catch (Exception ignored) {}
         }
 
-        // Need to check what types of book is available on hardcoded
-        System.out.print("Type of book: \n1. TextBook\n2. Novel\n3. Dictionary");
+        // Need to check what types of book are available on hardcoded
+        System.out.println("Type of book: \n1. TextBook\n2. Novel\n3. Dictionary");
         int input = 0;
         do {
-            System.out.print("\n> ");
+            System.out.print("> ");
             try {
                 input = Integer.parseInt(sc.nextLine());
             } catch (Exception ignored) {
@@ -204,10 +211,23 @@ public class Main {
         // Add book based on type
         Book book = null;
         switch (input) {
-            case 1 -> book = new TextBook(id, title, author, publisher, year, pages);
-            case 2 -> book = new Novel(id, title, author, publisher, year, pages);
-            case 3 -> book = new Dictionary(id, title, author, publisher, year, pages);
+            case 1 -> {
+                System.out.print("Subject: ");
+                String subject = sc.nextLine();
+                book = new TextBook(id, title, author, publisher, year, pages, subject);
+            }
+            case 2 -> {
+                System.out.print("Genre: ");
+                String genre = sc.nextLine();
+                book = new Novel(id, title, author, publisher, year, pages, genre);
+            }
+            case 3 -> {
+                System.out.print("Language: ");
+                String language = sc.nextLine();
+                book = new Dictionary(id, title, author, publisher, year, pages, language);
+            }
         }
+
         shelf.addBook(book);
     }
 
@@ -221,6 +241,7 @@ public class Main {
                 input = Integer.parseInt(sc.nextLine());
             } catch (Exception ignored) {}
             if (input == 1 || input == 2) return input;
+            System.out.println("Input must be number and is on the list");
         }
     }
 }

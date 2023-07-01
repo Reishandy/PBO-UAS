@@ -16,6 +16,7 @@ public class Receipt {
     public Receipt() {
         books = new ArrayList<>();
         borrowDate = LocalDate.now();
+        returnDate = LocalDate.now();
     }
 
     public void setBorrower(Person borrower) {
@@ -28,23 +29,28 @@ public class Receipt {
 
     public int setReturnDate(String date) {
         // Limit on return date is 2 week
+        LocalDate inputDate;
 
         // Check regex for inputted date, return 1 if wrong
         if (!Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) return 1;
 
         // check if legit date, return 2 if wrong
         try {
-            returnDate = LocalDate.parse(date);
+            inputDate = LocalDate.parse(date);
         } catch (DateTimeParseException e) {
             return 2;
         }
+        System.out.println(inputDate +" "+ returnDate);
 
-        // Check if date is more than 2 week, if more return 3
-        LocalDate twoWeeksFromNow = LocalDate.now().plusWeeks(2);
-        if (returnDate.isAfter(twoWeeksFromNow)) return 3;
+        // Check if date is more than 4 week, if more return 3
+        LocalDate twoWeeksFromNow = LocalDate.now().plusWeeks(4);
+        if (inputDate.isAfter(twoWeeksFromNow)) return 3;
 
-        // Check if valid date, if valid return 0
-        if (returnDate.isBefore(borrowDate) && returnDate.isEqual(borrowDate)) return 0;
+        // Check if valid date, if valid add then return 0
+        if (!inputDate.isBefore(borrowDate) && !inputDate.isEqual(borrowDate)) {
+            returnDate = inputDate;
+            return 0;
+        }
 
         return -1; // Just not good stuff
     }
