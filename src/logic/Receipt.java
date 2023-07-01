@@ -26,17 +26,27 @@ public class Receipt {
         books.add(book);
     }
 
-    public boolean setReturnDate(String date) {
-        // Check regex for inputted date
-        if (!Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) return false;
-        // check if legit date
+    public int setReturnDate(String date) {
+        // Limit on return date is 2 week
+
+        // Check regex for inputted date, return 1 if wrong
+        if (!Pattern.matches("\\d{4}-\\d{2}-\\d{2}", date)) return 1;
+
+        // check if legit date, return 2 if wrong
         try {
             returnDate = LocalDate.parse(date);
         } catch (DateTimeParseException e) {
-            return false;
+            return 2;
         }
-        // Check if valid date, if valid return true
-        return !returnDate.isBefore(borrowDate) && !returnDate.isEqual(borrowDate);
+
+        // Check if date is more than 2 week, if more return 3
+        LocalDate twoWeeksFromNow = LocalDate.now().plusWeeks(2);
+        if (returnDate.isAfter(twoWeeksFromNow)) return 3;
+
+        // Check if valid date, if valid return 0
+        if (returnDate.isBefore(borrowDate) && returnDate.isEqual(borrowDate)) return 0;
+
+        return -1; // Just not good stuff
     }
 
     public boolean isReturned() {

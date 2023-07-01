@@ -1,11 +1,15 @@
+// Author: Muhammad Akbar Reishandy
+// Author: Silvi Kusuma Wardhani G.
 package logic.books;
 
 import logic.Book;
 
 public class Dictionary extends Book implements IType {
-    // TODO: tambahkan kamus bahasa apa dan juga di tostring
-    public Dictionary(int id, String title, String author, String publisher, int year, int pages) {
+    private final String language;
+
+    public Dictionary(int id, String title, String author, String publisher, int year, int pages, String language) {
         super(id, title, author, publisher, year, pages);
+        this.language = language;
     }
 
     @Override
@@ -50,11 +54,19 @@ public class Dictionary extends Book implements IType {
 
     @Override
     public String toString() {
-        return super.toString()  + "type     : Dictionary\ncategory : Non-Fiction";
+        return super.toString() + 
+                "type     : Dictionary" +
+                "\ncategory : Non-Fiction" +
+                "\nlanguage : " + language;
     }
 
     @Override
     public String getType() {
         return "Dictionary";
+    }
+
+    @Override
+    public String getDetail() {
+        return language;
     }
 }

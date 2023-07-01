@@ -1,8 +1,8 @@
 // Author: Muhammad Akbar Reishandy
+// Author: Silvi Kusuma Wardhani G.
 package logic.books;
 
 public interface IType {
-    // TODO: tambah method getDetail untuk ngambil detail dari buku seperti genre, bahasa, mapel
-    // TODO: dan implementasikan input data di main calss
+    String getDetail();
     String getType();
 }

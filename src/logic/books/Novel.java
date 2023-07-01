@@ -1,13 +1,15 @@
 // Author: Muhammad Akbar Reishandy
+// Author: Silvi Kusuma Wardhani G.
 package logic.books;
 
 import logic.Book;
 
 public class Novel extends Book implements IType {
-    // TODO: tambahkna genre novel
+    private final String genre;
 
-    public Novel(int id, String title, String author, String publisher, int year, int pages) {
+    public Novel(int id, String title, String author, String publisher, int year, int pages, String genre) {
         super(id, title, author, publisher, year, pages);
+        this.genre = genre;
     }
 
     @Override
@@ -52,7 +54,15 @@ public class Novel extends Book implements IType {
 
     @Override
     public String toString() {
-        return super.toString() + "type     : Novel\ncategory : Fiction";
+        return super.toString() +
+               "type     : Novel\n" +
+               "category : Fiction\n" +
+               "genre    : " + genre;
+    }
+
+    @Override
+    public String getDetail() {
+        return genre;
     }
 
     @Override
