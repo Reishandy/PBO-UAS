@@ -28,18 +28,10 @@ public class Bookshelf {
     }
 
     // TODO: Add these function on main
-    public String[] listTitle() {
+    public String[] listBooks() {
         String[] list = new String[this.books.size()];
         for (int i = 0; i < list.length; i++) {
-            list[i] = this.books.get(i).getTitle();
-        }
-        return list;
-    }
-
-    public int[] listId() {
-        int[] list = new int[this.books.size()];
-        for (int i = 0; i < list.length; i++) {
-            list[i] = this.books.get(i).getId();
+            list[i] = this.books.get(i).getTitle() + " (" + this.books.get(i).getId() + ")";
         }
         return list;
     }
