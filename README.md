@@ -5,8 +5,8 @@ Repositori untuk kolaborasi projek akhir PBO semester 2 tahun 2023
 aplikasi ini berbasis java dan menggunkan gui swing java, fungsioanalitas dari aplikasi ini adalah meminjam buku dan mengembalikan buku.
 
 ## Oleh
-##### Developer : Muhammad Akbar Reishandy   (22157201033)
-##### Contributor : Silvi Kusuma Wardani G.  (22157201045)
+##### Developer : Muhammad Akbar Reishandy   (22157201033) [GitHub](https://github.com/Reishandy)
+##### Contributor : Silvi Kusuma Wardani G.  (22157201045) [GitHub](https://portal.enigmacamp.com/dashboard)
 Anggota : Samsul Hidayat              (22157201043)
 
 Anggota : Putri Indah Sari            (22157201042)
